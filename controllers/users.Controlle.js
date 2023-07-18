@@ -7,7 +7,9 @@ const loginUser = async (req, res, next) => {
     try {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
-            return APIRES.getErrorResult({ errors: errors.mapped() }, res)
+            let getErrmsg = errors.array()
+            let errResp = Array.isArray(getErrmsg) ? getErrmsg[0].msg : getErrmsg
+            return APIRES.getErrorResult({message: errResp }, res)
         }
         let send = {}
         const body = req.body
