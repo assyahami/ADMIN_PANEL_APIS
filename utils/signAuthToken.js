@@ -9,7 +9,7 @@ function signinAuthToken(id, role) {
             issuer: 'medicalshala',
             audience: id,
         };
-        jwt.sign({ user_id: id, role }, secretKey, options, (err, token) => {
+        jwt.sign({ user_id: id }, secretKey, options, (err, token) => {
             if (err) {
                 reject({ isError: true, message: 'Invalid operation!' });
             } else {

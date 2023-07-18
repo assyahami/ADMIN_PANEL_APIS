@@ -9,13 +9,16 @@ const loginUser = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return APIRES.getErrorResult({ errors: errors.mapped() }, res)
         }
-        let send={}
+        let send = {}
         const body = req.body
-        const findUser=await Users.findOne({phone:body.phone}).select("id role name phone")
-        const authToken=await signinAuthToken(findUser.id,findUser.role)
-        send.user=findUser
-        send.token=authToken
-        
+        const findUser = await Users.findOne({ phone: body.phone }).select("id role name phone")
+        if (!findUser) {
+            return APIRES.getNotExistsResult("User not be exits", res)
+        }
+        const authToken = await signinAuthToken(findUser.id, findUser.role)
+        send.user = findUser
+        send.token = authToken
+
         APIRES.getSuccessResult(send, res)
     } catch (error) {
         return APIRES.getErrorResult(error, res)

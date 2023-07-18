@@ -1,4 +1,5 @@
 const { default: mongoose } = require("mongoose");
+const Users = require("../models/users");
 
 
 const users = { name: 'Admin', phone: '7639950620', role: "ADMIN" } ;
