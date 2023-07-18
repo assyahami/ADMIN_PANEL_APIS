@@ -80,7 +80,7 @@ const listPatient = async (req, res, next) => {
         const getListPatient = await Patient.find({
             payment_status: getQuery.payment_status || "Pending",
             status: status,
-        }).sort({ name: 'asc' }).limit(ITEMS_PER_PAGE).skip(page)
+        }).sort({ name: 'asc' }).limit(ITEMS_PER_PAGE).skip(page).select("-__v")
         send.data = getListPatient
         send.totalItems = getListPatient.length
         send.totalIPage = totalItems
@@ -126,21 +126,21 @@ const attendPatient = async (req, res, next) => {
                     $gte: startOfWeek,
                     $lt: endOfWeek
                 }
-            }).limit(ITEMS_PER_PAGE).skip(page)
+            }).limit(ITEMS_PER_PAGE).skip(page).select("-__v")
         } else if (id == "day") {
             getResult = await Patient.find({
                 createdAt: {
                     $gt: today_start_date,
                     $lt: today_end_date
                 }
-            }).limit(ITEMS_PER_PAGE).skip(page)
+            }).limit(ITEMS_PER_PAGE).skip(page).select("-__v")
         } else {
             getResult = await Patient.find({
                 createdAt: {
                     $gt: startOfMonth,
                     $lt: endOfMonth
                 }
-            }).limit(ITEMS_PER_PAGE).skip(page)
+            }).limit(ITEMS_PER_PAGE).skip(page).select("-__v")
 
         }
         send.data = getResult,
@@ -156,7 +156,7 @@ const getPatient = async (req, res, next) => {
     try {
         let send = {}
         const patientID = req.params.id
-        const getPatient = await Patient.findById(patientID)
+        const getPatient = await Patient.findById(patientID).select("-__v")
         if (!getPatient) {
             return APIRES.getNotFoundMsg("Patient can't found", res)
         }
@@ -174,7 +174,7 @@ const deletePatient = async (req, res, next) => {
         if (!isPatientExits) {
             return APIRES.getNotFoundMsg("Patient can't found", res)
         }
-        const getPatient = await Patient.findByIdAndDelete(patientID)
+        const getPatient = await Patient.findByIdAndDelete(patientID).select("-__v")
         send.data = getPatient
         send.mesage = "Succesfully deleted patient"
         APIRES.getSuccessResult(send, res)
