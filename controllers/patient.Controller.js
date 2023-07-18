@@ -19,11 +19,9 @@ const createPatient = async (req, res, next) => {
         const savePatient = new Patient({
             ...body
         })
-        // savePatient.save().then((data) => {
-        //     console.log(data, 'data1');
-        // })
-
-
+        savePatient.save().then((data) => {
+            console.log(data, 'data1');
+        })
         send.patient = savePatient
 
         APIRES.getSuccessResult(send, res)
